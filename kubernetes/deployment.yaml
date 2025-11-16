@@ -4,8 +4,14 @@ metadata:
   name: flask-app
   labels:
     app: flask-app
+    version: v1
 spec:
-  replicas: 2
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: flask-app
@@ -13,6 +19,7 @@ spec:
     metadata:
       labels:
         app: flask-app
+        version: v1
     spec:
       containers:
       - name: flask-app
@@ -20,6 +27,7 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 5000
+          protocol: TCP
         resources:
           requests:
             memory: "64Mi"
@@ -27,3 +35,15 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
