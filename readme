@@ -1,2 +1,224 @@
-hi
-hello 
+ 🚀 Flask Kubernetes CI/CD Pipeline
+
+### **Cloud MLOps – Assignment #3**
+
+This repository implements a complete **End-to-End CI/CD pipeline** for a Python **Flask application**, using:
+
+* **GitHub + GitHub Actions** for Continuous Integration
+* **Jenkins** for Continuous Delivery
+* **Docker** for containerization
+* **Kubernetes (Minikube)** for orchestration
+* **Protected main branch + PR workflow**
+* **Rolling updates, scaling, and load balancing**
+
+---
+
+## 👥 Team Members
+
+| Name       | Role          | Responsibilities                                                              |
+| ---------- | ------------- | ----------------------------------------------------------------------------- |
+| **Usman**  | **Admin**     | Repo setup, branch protection, PR reviews, Minikube + Jenkins setup           |
+| **Ahmad**  | **Developer** | Flask app, Dockerfile, GitHub Actions workflow, Kubernetes YAMLs, Jenkinsfile |
+| **Shazil** | **Tester**    | Unit tests, linting, CI validation, Kubernetes scaling & rollout testing      |
+
+---
+
+## 📌 Project Features
+
+### ✔ Flask Application
+
+A simple Flask API returning: **“Hello, World!”**
+
+### ✔ Continuous Integration (GitHub Actions)
+
+Runs automatically on every push:
+
+* Python setup
+* Install dependencies
+* **flake8** (max line length = 90)
+* **pytest** unit tests
+* Docker image build
+
+### ✔ Continuous Delivery (Jenkins → Kubernetes)
+
+Triggered on merges into **main**:
+
+1. Build Docker image
+2. Deploy to Kubernetes
+3. Verify rollout, pods, and services
+
+### ✔ Kubernetes (Minikube)
+
+* Rolling updates (maxSurge / maxUnavailable)
+* Multi-replica Deployment
+* Resource limits & requests
+* NodePort Service (load balancing)
+* Scaling & rollback supported
+
+---
+
+## 📁 Repository Structure
+
+```
+flask-k8s-ci-cd-assignment/
+│── app.py
+│── requirements.txt
+│── Dockerfile
+│── Jenkinsfile
+│── README.md
+│── .github/
+│     └── workflows/
+│           └── ci.yml
+│── kubernetes/
+│     ├── deployment.yaml
+│     └── service.yaml
+│── tests/
+│     ├── sample.py
+│     └── test_sample.py
+```
+
+---
+
+## 🐍 Running the App Locally with Docker
+
+### 1️⃣ Build the Docker Image
+
+```bash
+docker build -t flask-app .
+```
+
+### 2️⃣ Run the Container
+
+```bash
+docker run -p 5000:5000 flask-app
+```
+
+Visit in browser:
+
+```
+http://localhost:5000
+```
+
+---
+
+## ☸️ Kubernetes Deployment (Manual on Minikube)
+
+### Start Minikube
+
+```bash
+minikube start
+```
+
+### Apply All Manifests
+
+```bash
+kubectl apply -f kubernetes/
+```
+
+### Check Resources
+
+```bash
+kubectl get pods
+kubectl get deployments
+kubectl get services
+```
+
+### Access Service
+
+```bash
+minikube service flask-service
+```
+
+---
+
+## 🔄 CI/CD Workflow Summary
+
+### **1️⃣ GitHub Actions – Continuous Integration**
+
+Checks on every push:
+
+* Linting
+* Unit tests
+* Docker build
+
+### **2️⃣ Jenkins – Continuous Delivery**
+
+Triggered when merging into **main**:
+
+1. Build the Docker image
+2. Deploy to Kubernetes
+3. Validate rollout/pods/services
+
+---
+
+## ☸️ Kubernetes Features Implemented
+
+### ✔ Rolling Updates
+
+Uses Kubernetes Deployment strategy:
+
+* `maxSurge`
+* `maxUnavailable`
+
+### ✔ Horizontal Scaling
+
+```bash
+kubectl scale deployment flask-deployment --replicas=4
+```
+
+### ✔ Rollback
+
+```bash
+kubectl rollout undo deployment/flask-deployment
+```
+
+### ✔ Load Balancing
+
+Provided via `NodePort` service across replicas.
+
+### ✔ Resource Limits
+
+Ensures stable workload scheduling.
+
+---
+
+## 🛠 Team Workflow Summary
+
+### **Admin – Usman**
+
+* Created repo
+* Branch protection
+* Milestones & issues
+* Minikube + Jenkins setup
+* PR review & merging
+
+### **Developer – Ahmad**
+
+* Wrote Flask app
+* Dockerfile
+* GitHub Actions CI
+* Kubernetes manifests
+* Jenkinsfile pipeline
+
+### **Tester – Shazil**
+
+* pytest test suite
+* flake8 configuration
+* GitHub Actions validation
+* Kubernetes rollout & scaling tests
+
+---
+
+## 📦 End-to-End Automation Summary
+
+1. Developer pushes code → **GitHub Actions CI runs**
+2. Tester validates → Admin reviews PR
+3. PR merged into **develop**, then into **main**
+4. Jenkins job triggers
+5. Jenkins builds & deploys to Minikube
+6. Kubernetes applies rolling update
+7. App accessible via LoadBalancer / NodePort
+
+✔ Fully automated CI/CD
+✔ Verified by Admin, Developer, and Tester
+
